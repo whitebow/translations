@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>PCBSTools - Calculator</title>
+<meta charset="UTF-8">
+<script src='js/calc.js'></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Roboto", sans-serif;
+    }
+
+    .w3-sidebar {
+        z-index: 3;
+        width: 250px;
+        top: 43px;
+        bottom: 0;
+        height: inherit;
+    }
+
+	#content {
+		margin-top: 50px;
+		height: 100%;
+		width: 100%;
+		text-align: center;
+	}
+
+	#scoreCalculator {
+		background-color: #ffffff;
+		width: 500px;
+		margin: auto;
+		padding: 15 20px;
+	}
+
+	input {
+		border-radius: 5px 5px 5px 5px;
+		height: 25px;
+		width: 350px;
+	}
+
+	caption {
+		font-size: 25px;
+		font-weight: bold;
+	}
+
+	select {
+		border-radius: 5px 5px 5px 5px;
+		height: 25px;
+		width: 350px;
+	}
+
+	#first {
+		display: block;
+	}
+
+	#second {
+		display: none;
+	}
+
+	#third {
+		display: none;
+	}
+
+	#forth{
+		display: none;
+	}
+
+	#buildMaker {
+		background-color: #ffffff;
+		width: 500px;
+		margin: auto;
+		padding: 15 20px;
+		margin-bottom: 20px;
+	}
+
+	#buildUpgrader {
+		margin: auto;
+		width: 500px;
+		background-color: #ffffff;
+		padding: 15 20px;
+		margin-bottom: 20px;
+	}
+
+	#buildMakerTable td {
+		border: 1px solid;
+		padding: 8px;
+	}
+
+	#buildMakerTable {
+		border: none;
+		padding: 8px;
+		border-collapse: collapse;
+		margin: auto;
+	}
+
+	#buildMakerHistoryTable td{
+		border: 1px solid;
+		padding: 8px;
+	}
+    
+    #scoreCalculatorHistoryTable td{
+		border: 1px solid;
+		padding: 8px;
+	}
+    
+    #buildMakerHistoryTable {
+		border: none;
+		padding: 8px;
+		border-collapse: collapse;
+		margin: auto;
+	}
+    
+    #scoreCalculatorHistoryTable {
+		border: none;
+		padding: 8px;
+		border-collapse: collapse;
+		margin: auto;
+	}
+
+	#buildUpgraderTable td {
+		border: 1px solid;
+		padding: 8px;
+	}
+
+	#buildUpgraderTable {
+		border: none;
+		padding: 8px;
+		border-collapse: collapse;
+		margin: auto;
+	}
+		
+	#saveBuildBackground {
+		top: 40%;
+		left: 40%;
+		position: absolute;
+		background-color: #dddddd;
+		z-index: 2;
+		border: 5px 5px 5px 5px;
+		height: 100px;
+		width: 350px;
+		padding: 20px 20px;
+		display: none;
+	}
+</style>
+
+<body>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme w3-large">
+            <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1"
+                href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+            <a href="../en/index.html" class="w3-bar-item w3-button w3-hover-green w3-theme-l1">PCBSTools</a>
+            <div class="w3-dropdown-hover w3-hover-green">
+                <button class="w3-button w3-hover-green">List of Tools</button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="../en/partsranking.html" class="w3-bar-item w3-button w3-hover-green">Parts Ranking</a>
+                    <a href="../en/calculator.html" class="w3-bar-item w3-button w3-hover-green">Calculator</a>
+                </div>
+            </div>
+            <a href="../en/upcomingfeatures.html" class="w3-bar-item w3-button w3-hide-small w3-hover-green">Upcoming Features</a>
+            <a href="../en/support.html" class="w3-bar-item w3-button w3-hide-small w3-hover-green">Support</a>
+            <div class="w3-dropdown-hover w3-hover-green">
+                <button class="w3-button w3-hover-green">Language</button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="../ko/calculator.html" class="w3-bar-item w3-button w3-hover-green">한국어</a>
+                    <a href="../en/calculator.html" class="w3-bar-item w3-button w3-hover-green">English</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PCBS Image -->
+    <section>
+        <div align="center"><img src="img/img_calculator.jpg" style="width:100%"></div>
+    </section>
+
+    <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+    <div class="w3-main w3-center w3-content" style="max-width:1200px">
+        <div class="w3-row w3-padding-64">
+            <div class="w3-container">
+                <h1 class="w3-text-teal">Calculator</h1>
+                <p>Various Calculators for Best PC Builders.</p>
+            </div>
+        </div>
+
+        <section class="w3-row-padding w3-center w3-light-grey">
+            <script src='js/calc_new.js'></script>
+            <div>
+                <button class="w3-button w3-black w3-hover-green" onclick="showThisCal('first','second','third','forth');">3DMark™ Calculator</button>
+                <button class="w3-button w3-black w3-hover-green" onclick="showThisCal('second','first','third','forth');">Build Maker</button>
+                <button class="w3-button w3-black w3-hover-green" onclick="showThisCal('third','first','second','forth');">Build Upgrader</button>
+                <button class="w3-button w3-black w3-hover-green w3-disabled">Overclock Calculator (Coming Soon)</button>
+                <button class="w3-button w3-black w3-hover-green" onclick="showThisCal('forth','first','second','third');">History</button>
+            </div>
+            <div id="content">
+		<datalist id="cpuList">
+			<option>Intel Celeron G3900</option>
+			<option>Intel Celeron G3930</option>
+			<option>Intel Celeron G3950</option>
+			<option>Intel Pentium G4400</option>
+			<option>Intel Pentium G4500</option>
+			<option>Intel Pentium G4520</option>
+			<option>Intel Core i3-6100T</option>
+			<option>Intel Pentium G4560</option>
+			<option>Intel Pentium G4600</option>
+			<option>Intel Core i3-6100</option>
+			<option>Intel Core i3-6300</option>
+			<option>Intel Pentium G4620</option>
+			<option>Intel Core i3-6320</option>
+			<option>Intel Core i3-7100</option>
+			<option>Intel Core i3-7300</option>
+			<option>Intel Core i3-7320</option>
+			<option>Intel Core i3-7350K</option>
+			<option>AMD Ryzen 3 Quad Core 1200</option>
+			<option>AMD Ryzen 3 Quad Core 1300X</option>
+			<option>Intel Core i5-6400</option>
+			<option>Intel Core i5-6500</option>
+			<option>Intel Core i3-8100</option>
+			<option>Intel Core i5-7400</option>
+			<option>Intel Core i5-6600</option>
+			<option>Intel Core i5-6600K</option>
+			<option>AMD Ryzen 5 Quad Core 1400</option>
+			<option>Intel Core i5-7500</option>
+			<option>Intel Core i3-8350K</option>
+			<option>AMD Ryzen 5 Quad Core 1500X</option>
+			<option>Intel Core i5-7600</option>
+			<option>Intel Core i5-7600K</option>
+			<option>Intel Core i5-7640X</option>
+			<option>Intel Core i7-6700</option>
+			<option>Intel Core i7-6700K</option>
+			<option>Intel Core i7-7700</option>
+			<option>Intel Core i7-7740X</option>
+			<option>Intel Core i7-7700K</option>
+			<option>Intel Core i5-8400</option>
+			<option>AMD Ryzen 5 Six Core 1600</option>
+			<option>Intel Core i5-8600K</option>
+			<option>Intel Core i5-9600K</option>
+			<option>AMD Ryzen 5 Six Core 1600X</option>
+			<option>AMD Ryzen 5 Six Core 2600</option>
+			<option>AMD Ryzen 5 Six Core 2600X</option>
+			<option>Intel Core i7-7800X</option>
+			<option>AMD Ryzen Threadripper 2970WX</option>
+			<option>AMD Ryzen 7 Eight Core 1700</option>
+			<option>Intel Core i7-8700</option>
+			<option>AMD Ryzen 7 Eight Core 1700X</option>
+			<option>AMD Ryzen Threadripper Eight Core 1900X</option>
+			<option>Intel Core i7-8700K</option>
+			<option>Intel Core i7-9700K</option>
+			<option>AMD Ryzen 7 Eight Core 1800X</option>
+			<option>Intel Core i7-8086K</option>
+			<option>AMD Ryzen 7 Eight Core 2700</option>
+			<option>AMD Ryzen 7 Eight Core 2700X</option>
+			<option>AMD Ryzen Threadripper Twelve Core 1920X</option>
+			<option>Intel Core i7-7820X</option>
+			<option>AMD Ryzen Threadripper Sixteen Core 1950X</option>
+			<option>Intel Core i7-9800X</option>
+			<option>AMD Ryzen Threadripper 2920X</option>
+			<option>AMD Ryzen Threadripper 2950X</option>
+			<option>Intel Core i9-9820X</option>
+			<option>Intel Core i9-9900X</option>
+			<option>Intel Core i9-7900X</option>
+			<option>Intel Core i9-9900K</option>
+			<option>Intel Core i9-7920X</option>
+			<option>Intel Core i9-9920X</option>
+			<option>Intel Core i9-7940X</option>
+			<option>Intel Core i9-9940X</option>
+			<option>Intel Core i9-7980XE</option>
+			<option>Intel Core i9-7960X</option>
+			<option>AMD Ryzen Threadripper 2990WX</option>
+			<option>Intel Core i9-9960X</option>
+			<option>Intel Core i9-9980XE</option>
+		</datalist>
+		<datalist id="gpuList">
+			<option>EVGA GeForce GT 1030 SC</option>
+			<option>GIGABYTE GeForce GT 1030 OC 2G</option>
+			<option>Shean GeForce GTX 750 Ti GAMER</option>
+			<option>MSI GeForce GTX 1050 GAMING 2G</option>
+			<option>MSI Radeon R9 370 GAMING 2G</option>
+			<option>GIGABYTE GeForce GTX 1050 Windforce OC 2G</option>
+			<option>MSI GeForce GTX 1050 GAMING X 2G</option>
+			<option>MSI Radeon R9 370 GAMING 4G</option>
+			<option>MSI GeForce GTX 950 GAMING 2G</option>
+			<option>ASUS Radeon RX 560</option>
+			<option>EVGA GeForce GTX 1050 Ti GAMING</option>
+			<option>MSI GeForce GTX 1050 Ti GAMING 4G</option>
+			<option>ASUS ROG Strix Radeon RX 560 OC Edition</option>
+			<option>DFL Radeon R9 280 GR8 3G</option>
+			<option>GIGABYTE GeForce GTX 1050 Ti Windforce OC 4G</option>
+			<option>MSI GeForce GTX 1050 Ti GAMING X 4G</option>
+			<option>MSI Radeon R9 280 GAMING 3G LE</option>
+			<option>EVGA GeForce GTX 1050 Ti FTW GAMING</option>
+			<option>ZOTAC GeForce GTX 1050 Ti OC Edition</option>
+			<option>MSI Radeon R9 280 GAMING 3G</option>
+			<option>MSI GeForce GTX 960 GAMING LE 100ME</option>
+			<option>MSI GeForce GTX 960 GAMING 2G LE</option>
+			<option>MSI GeForce GTX 960 GAMING 4G LE</option>
+			<option>MSI GeForce GTX 960 GAMING 2G</option>
+			<option>MSI GeForce GTX 960 GAMING 4G</option>
+			<option>MSI GeForce GTX 960 GAMING 100ME</option>
+			<option>MSI Radeon R9 380 GAMING 2G</option>
+			<option>MSI Radeon R9 380 GAMING 4G</option>
+			<option>MSI GeForce GTX 970 GAMING 4G</option>
+			<option>Shean GeForce GTX 970 GAMER</option>
+			<option>MSI GeForce GTX 970 GAMING LE 100ME</option>
+			<option>Shean GeForce GTX 970 GAMER XL</option>
+			<option>MSI GeForce GTX 970 GAMING 100ME</option>
+			<option>MSI GeForce GTX 970 GAMING 4G Golden Edition</option>
+			<option>EVGA GeForce GTX 1060 GAMING 3GB</option>
+			<option>MSI Radeon RX 470 GAMING 8G</option>
+			<option>MSI Radeon RX 470 GAMING 4G</option>
+			<option>MSI GeForce GTX 1060 GAMING 3G</option>
+			<option>DFL Radeon R9 290 GR8</option>
+			<option>MSI Radeon RX 470 GAMING X 8G</option>
+			<option>MSI Radeon RX 470 GAMING X 4G</option>
+			<option>MSI GeForce GTX 1060 GAMING VR 3G</option>
+			<option>MSI GeForce GTX 1060 GAMING X 3G</option>
+			<option>ASUS Expedition Radeon RX 570 OC Edition</option>
+			<option>MSI GeForce GTX 1060 GAMING VR X 3G</option>
+			<option>MSI Radeon RX 570 GAMING 8G</option>
+			<option>MSI Radeon RX 570 GAMING 4G</option>
+			<option>DFL Radeon R9 290 GR8TOR</option>
+			<option>NVIDIA GeForce GTX 1060 Founders Edition</option>
+			<option>ZOTAC GeForce GTX 1060 Mini</option>
+			<option>MSI Radeon RX 570 GAMING X 4G</option>
+			<option>MSI Radeon RX 570 GAMING X 8G</option>
+			<option>GIGABYTE AORUS Radeon RX570 4G</option>
+			<option>MSI GeForce GTX 1060 GAMING 6G</option>
+			<option>ASUS ROG Strix Radeon RX570 OC Edition</option>
+			<option>MSI GeForce GTX 1060 GAMING VR 6G</option>
+			<option>ZOTAC GeForce GTX 1060 AMP! Edition</option>
+			<option>MSI Radeon R9 390 GAMING 8G LE</option>
+			<option>MSI Radeon RX 480 GAMING 4G</option>
+			<option>MSI GeForce GTX 1060 GAMING+ 6G</option>
+			<option>MSI GeForce GTX 1060 GAMING X 6G</option>
+			<option>MSI GeForce GTX 1060 GAMING VR X 6G</option>
+			<option>Shean GeForce GTX 980 GAMER</option>
+			<option>MSI Radeon RX 480 GAMING X 4G</option>
+			<option>ASUS ROG Strix GeForce GTX 1060 OC Edition</option>
+			<option>EVGA GeForce GTX 1060 FTW2 GAMING</option>
+			<option>GIGABYTE AORUS GeForce GTX 1060 6G</option>
+			<option>MSI Radeon RX 480 GAMING 8G</option>
+			<option>MSI Radeon R9 390 GAMING 8G</option>
+			<option>MSI GeForce GTX 1060 GAMING X+ 6G</option>
+			<option>MSI GeForce GTX 980 GAMING 4G LE</option>
+			<option>GIGABYTE AORUS GeForce GTX 1060 Xtreme Edition 6G</option>
+			<option>MSI Radeon RX 480 GAMING X 8G</option>
+			<option>Shean GeForce GTX 980 GAMER XL</option>
+			<option>MSI Radeon R9 390X GAMING 8G LE</option>
+			<option>MSI Radeon RX 580 GAMING 4G</option>
+			<option>ASUS AREZ Strix Radeon RX 580</option>
+			<option>GIGABYTE AORUS Radeon RX580 4G</option>
+			<option>ASUS Dual Series Radeon RX 580 OC Edition</option>
+			<option>MSI Radeon RX 580 GAMING 8G</option>
+			<option>MSI Radeon RX 580 GAMING X 4G</option>
+			<option>GIGABYTE AORUS Radeon RX580 8G</option>
+			<option>MSI Radeon R9 390X GAMING 8G</option>
+			<option>MSI Radeon RX 580 GAMING X 8G</option>
+			<option>MSI Radeon RX 580 GAMING+ 8G</option>
+			<option>MSI Radeon RX 580 GAMING X+ 8G</option>
+			<option>MSI GeForce GTX 980 Ti GAMING 6G LE</option>
+			<option>EVGA GeForce GTX 1070 GAMING</option>
+			<option>NVIDIA GeForce GTX 1070 Founders Edition</option>
+			<option>MSI GeForce GTX 980 Ti GAMING 6G</option>
+			<option>ZOTAC GeForce GTX 1070 Mini</option>
+			<option>MSI GeForce GTX 980 Ti GAMING 6G GOLDEN EDITION</option>
+			<option>MSI GeForce GTX 1070 GAMING 8G</option>
+			<option>EVGA GeForce GTX 1070 FTW2 GAMING</option>
+			<option>MSI GeForce GTX 1070 GAMING X 8G</option>
+			<option>ASUS ROG Strix GeForce GTX 1070 OC Edition</option>
+			<option>GIGABYTE AORUS GeForce GTX 1070 8G</option>
+			<option>ZOTAC GeForce GTX 1070 AMP Extreme</option>
+			<option>MSI GeForce GTX 1070 GAMING Z 8G</option>
+			<option>AMD Radeon RX Vega 56</option>
+			<option>ASUS ROG Strix GeForce GTX 1070 Ti Advanced Edition</option>
+			<option>MSI GeForce GTX 1070 Ti GAMING 8G</option>
+			<option>MSI GeForce GTX 1070 Ti Titanium 8G</option>
+			<option>NVIDIA GeForce GTX 1070 Ti Founders Edition</option>
+			<option>ASUS AREZ Strix Radeon RX VEGA 56 OC Edition</option>
+			<option>NVIDIA GeForce RTX 2060 Founders Edition</option>
+			<option>EVGA GeForce GTX 1080 GAMING</option>
+			<option>NVIDIA GeForce GTX 1080 Founders Edition</option>
+			<option>AMD Radeon RX Vega 64</option>
+			<option>ZOTAC GeForce GTX 1080 Mini</option>
+			<option>ASUS ROG Strix RX VEGA64 OC Edition</option>
+			<option>MSI GeForce GTX 1080 GAMING 8G</option>
+			<option>MSI GeForce GTX 1080 GAMING X 8G</option>
+			<option>MSI GeForce GTX 1080 GAMING+ 8G</option>
+			<option>GIGABYTE AORUS GeForce GTX 1080 8G</option>
+			<option>ASUS ROG Strix GeForce GTX 1080 OC Edition</option>
+			<option>NVIDIA GeForce RTX 2070 Founders Edition</option>
+			<option>MSI GeForce GTX 1080 GAMING Z 8G</option>
+			<option>MSI GeForce GTX 1080 GAMING X+ 8G</option>
+			<option>ZOTAC GeForce GTX 1080 AMP Extreme</option>
+			<option>GIGABYTE AORUS GeForce GTX 1080 Xtreme Edition 8G</option>
+			<option>EVGA GeForce GTX 1080 Ti GAMING</option>
+			<option>NVIDIA GeForce GTX 1080 Ti Founders Edition</option>
+			<option>EVGA GeForce RTX 2070 FTW3 ULTRA GAMING</option>
+			<option>GIGABYTE AORUS GeForce RTX 2070 XTREME 8G</option>
+			<option>ZOTAC GeForce GTX 1080 Ti Mini</option>
+			<option>MSI GeForce GTX 1080 Ti GAMING 11G</option>
+			<option>AMD Radeon VII</option>
+			<option>ASUS ROG Strix GeForce GTX 1080 Ti OC Edition</option>
+			<option>MSI GeForce GTX 1080 Ti GAMING X 11G</option>
+			<option>EVGA GeForce GTX 1080 Ti K|NGP|N GAMING</option>
+			<option>GIGABYTE AORUS GeForce GTX 1080 Ti 11G</option>
+			<option>ZOTAC GeForce GTX 1080 Ti AMP Extreme</option>
+			<option>GIGABYTE AORUS GeForce GTX 1080 Ti Xtreme Edition 11G</option>
+			<option>NVIDIA GeForce RTX 2080 Founders Edition</option>
+			<option>EVGA GeForce RTX 2080 FTW3 ULTRA GAMING</option>
+			<option>GIGABYTE AORUS GeForce RTX 2080 XTREME 8G</option>
+			<option>NVIDIA GeForce RTX 2080 Ti Founders Edition</option>
+			<option>EVGA GeForce RTX 2080 Ti FTW3 ULTRA GAMING</option>
+			<option>GIGABYTE AORUS GeForce RTX 2080 Ti XTREME 11G</option>
+		</datalist>
+		<datalist id="mobolist">
+			<option>GIGABYTE GA-AB350M-Gaming 3</option>
+			<option>GIGABYTE B450 AORUS M</option>
+			<option>Mortoni H170 Mtech</option>
+			<option>GIGABYTE GA-AB350-Gaming 3</option>
+			<option>EVGA X299 Micro</option>
+			<option>GIGABYTE B360N AORUS GAMING WIFI</option>
+			<option>GIGABYTE B360 AORUS GAMING 3</option>
+			<option>GIGABYTE H370 AORUS GAMING 3</option>
+			<option>MSI B450 TOMAHAWK</option>
+			<option>Mortoni H170 Mtech plus</option>
+			<option>Mortoni A320M Mtech plus</option>
+			<option>ASUS TUF Z370-PRO GAMING</option>
+			<option>GIGABYTE B360M AORUS GAMING 3</option>
+			<option>ASUS TUF Z370-PLUS GAMING</option>
+			<option>ASUS PRIME X470-PRO</option>
+			<option>ASUS PRIME Z370-A</option>
+			<option>GIGABYTE GA-B250M-Gaming 5</option>
+			<option>GIGABYTE Z370 AORUS Ultra Gaming</option>
+			<option>MSI Z270 Gaming Pro Carbon</option>
+			<option>MSI B450I GAMING PLUS AC</option>
+			<option>ASUS ROG Strix Z370-G Gaming (Wi-Fi AC)</option>
+			<option>GIGABYTE GA-AX370-Gaming 5</option>
+			<option>ASUS ROG Strix X470-F Gaming</option>
+			<option>MSI Z370 Gaming Pro Carbon</option>
+			<option>DFL H170 4TUNE X</option>
+			<option>DFL A320M 4TUNE X</option>
+			<option>ASUS ROG Strix Z370-I Gaming</option>
+			<option>EVGA Z370 FTW</option>
+			<option>EVGA X299 FTW K</option>
+			<option>MSI MPG Z390 GAMING PRO CARBON</option>
+			<option>ASUS ROG Strix X470-I Gaming</option>
+			<option>ASUS ROG Strix Z370-E Gaming</option>
+			<option>GIGABYTE GA-AX370-Gaming K7</option>
+			<option>EVGA Z270 FTW K</option>
+			<option>GIGABYTE X470 AORUS GAMING 7 WIFI</option>
+			<option>NZXT N7 Z370 (White)</option>
+			<option>NZXT N7 Z370 (Black)</option>
+			<option>GIGABYTE Z370 AORUS Gaming 7</option>
+			<option>ASUS ROG Maximus X Hero (Wi-Fi AC)</option>
+			<option>ASUS ROG Crosshair VII Hero (WI-FI)</option>
+			<option>NZXT N7 Z390 (White)</option>
+			<option>NZXT N7 Z390 (Black)</option>
+			<option>ASUS ROG Maximus X Code</option>
+			<option>ASUS ROG Strix X299-E Gaming</option>
+			<option>EVGA Z270 Classified K</option>
+			<option>ASUS ROG Strix X399-E Gaming</option>
+			<option>GIGABYTE X299 DESIGNARE EX</option>
+			<option>ASUS TUF X299 MARK 1</option>
+			<option>ASUS ROG Maximus X Formula</option>
+			<option>MSI X399 Gaming Pro Carbon AC</option>
+			<option>GIGABYTE X399 AORUS Gaming 7</option>
+			<option>ASUS ROG Maximus X Apex</option>
+			<option>GIGABYTE X399 DESIGNARE EX</option>
+			<option>GIGABYTE X299 AORUS Gaming 9</option>
+			<option>GIGABYTE GA-Z270X-Gaming 8</option>
+			<option>ASUS PRIME X299-DELUXE</option>
+			<option>ASUS ROG ZENITH EXTREME</option>
+			<option>ASUS ROG Rampage VI Apex</option>
+			<option>ASUS ROG Rampage VI Extreme</option>
+		</datalist>
+		
+		<div id="first">
+			<div id="scoreCalculator">
+				<table>
+					<caption>3DMark™ Calculator</caption>
+					<form id="scoreCForm">
+						<tr>
+							<td>CPU:</td>
+							<td><input required name="cpu1" list="cpuList" onchange="showAvailableRamSpeed(this.value,rams1);showAvailableRamChannel(this.value,ramc1)"></input></td>
+						</tr>
+						<tr>
+							<td>RAM Speed</td>
+							<td>
+								<select name="rams1">
+									<option>1866</option>
+									<option>2133</option>
+									<option>2400</option>
+									<option>2600</option>
+									<option>2666</option>
+									<option>2667</option>
+									<option>2800</option>
+									<option>2933</option>
+									<option>3000</option>
+									<option>3066</option>
+									<option>3200</option>
+									<option>3300</option>
+									<option>3333</option>
+									<option>3400</option>
+									<option>3466</option>
+									<option>3600</option>
+									<option>3666</option>
+									<option>3733</option>
+									<option>3800</option>
+									<option>3866</option>
+									<option>4000</option>
+									<option>4133</option>
+									<option>4200</option>
+									<option>4266</option>
+									<option>4300</option>
+									<option>4333</option>
+									<option>4400</option>
+									<option>4500</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>RAM Channel</td>
+							<td>
+								<select name="ramc1">
+									<option value="1">Single(1 RAM)</option>
+									<option value="2">Dual(2 RAMs)</option>
+									<option value="3">Trio(3 RAMs)</option>
+									<option value="4">Quad(4 RAMs)</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>GPU</td>
+							<td><input required name="gpu1" list="gpuList"></input></td>
+						</tr>
+						<tr>
+							<td>SLI/CrossFire</td>
+							<td>
+								<select name="slicf1">
+									<option value="1" selected>No (Default)</option>
+									<option value="2">Yes</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><button type="button" onclick="scoreCalculatorCal();saveBuild(cpu1.value,ramc1.value,rams1.value,gpu1.value,slicf1.value,'-','-',scoreCalculatorCal()[2],'-',scoreCalculatorCal()[1],scoreCalculatorCal()[0],'scorecalculator','-')">Calculate</button></td>
+						</tr>
+					</form>
+					<tr></tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td>CPU Score :</td>
+						<td id="cpuScoreResult1"></td>
+					</tr>
+					<tr>
+						<td>GPU Score :</td>
+						<td id="gpuScoreResult1"></td>
+					</tr>
+					<tr>
+						<td>Total Score :</td>
+						<td id="totalScoreResult1"></td>
+					</tr>
+					<tr>
+						<td>Estimated Wattage :</td>
+						<td id="wattageResult1"></td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td>CPU Price (New):</td>
+						<td id="cpuPrice1"></td>
+					</tr>
+					<tr>
+						<td>CPU Price (Used):</td>
+						<td id="cpuUsedPrice1"></td>
+					</tr>
+					<tr>
+						<td>GPU Price (New):</td>
+						<td id="gpuPrice1"></td>
+					</tr>
+					<tr>
+						<td>GPU Price (Used):</td>
+						<td id="gpuUsedPrice1"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="second">
+			<div id="buildMaker">
+				<table>
+					<caption>Build Maker</caption>
+					<form id="buildForm">
+						<tr>
+							<td>
+								Budget
+							</td>
+							<td>
+								<input required name="budget1"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Reserved Budget
+							</td>
+							<td>
+								<input name="resbudget1" placeholder="0"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Score
+							</td>
+							<td>
+								<input required name="score1"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Score Offset
+							</td>
+							<td>
+								<input name="offset1" placeholder="200"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Level
+							</td>
+							<td>
+								<input required name="level1"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Number of Results
+							</td>
+							<td>
+								<input name="results1" placeholder="10"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Sockets(Build Architecture)
+							</td>
+							<td>
+								<select name="architecture1">
+									<option selected>Any</option>
+									<option value="skylake">LGA 1151(Skylake)</option>
+									<option value="kabylake">LGA 1151(Kabylake)</option>
+									<option value="coffeelake">LGA 1151(Coffeelake)</option>
+									<option value="xseries">LGA 2066(Intel Core X-Series™)</option>
+									<option value="ryzen">AM4 (AMD RYZEN)</option>
+									<option value="threadripper">TR4 (Threadripper)</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Include Motherboard?
+							</td>
+							<td>
+								<input type="checkbox" name="incmobo1"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Include RAM?
+							</td>
+							<td>
+								<input type="checkbox" name="incram1"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Need Overclock?
+							</td>
+							<td>
+								<input type="checkbox" name="needoc1"></input>
+							</td>
+						</tr>
+						<tr>
+							<td><button type="button" onclick="generateBuild()">Calculate Build!</button></td>
+						</tr>
+					</form>
+				</table>
+			</div>
+			<div id="buildMakerResults">
+				<table id="buildMakerTable">
+					<tr>
+						<td>CPU</td>
+						<td>RAM Channel</td>
+						<td>RAM Speed</td>
+						<td>GPU</td>
+						<td>SLI/CrossFire</td>
+						<td>Motherboard</td>
+						<td>RAM</td>
+						<td>Cost</td>
+						<td>Budget Left</td>
+						<td>Estimated Wattage</td>
+						<td>Score</td>
+						<td>Save</td>
+					</tr>
+				</table>
+			</div>
+			<div id="saveBuildBackground">
+				<form id="saveForm">
+					<input type="search" name="remarks" placeholder="Remarks"></input>
+					<button type="button" onclick="unblurBackground(document.getElementById('buildMaker'));unblurBackground(document.getElementById('buildMakerResults'));hideSaver(document.getElementById('saveBuildBackground'));savePcBuild(document.getElementById('buildMakerTable').rows[temp],'build',document.getElementById('saveForm').remarks.value);">Save</button>
+					<button type="button" onclick="unblurBackground(document.getElementById('buildMaker'));unblurBackground(document.getElementById('buildMakerResults'));hideSaver(document.getElementById('saveBuildBackground'))">Cancel</button>
+				</form>
+			</div>
+		</div>
+		<div id="third">
+			<div id="buildUpgrader">
+				<table>
+					<form id="upgradeForm" name="upgradeForm">
+						<caption>
+							Build Upgrader
+						</caption>
+						<tr>
+							<td>Current CPU</td>
+							<td><input required name="currentProc1" list="cpuList" type="search" onchange="showAvailableRamChannel(this.value,currentRamC1);showAvailableRamSpeed(this.value,currentRamS1);showAvailableMotherboard(this.value,currentGpu1.value,currentSlicf1.value,currentMobo1)"></td>
+						</tr>
+						<tr>
+							<td>Current RAM Channel</td>
+							<td>
+								<select name="currentRamC1">
+									<option value="1" selected>Single (1 RAM)</option>
+									<option value="2">Dual (2 RAMs)</option>
+									<option value="3">Trio (3 RAMs)</option>
+									<option value="4">Quad (4 RAMs)</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Current RAM Speed</td>
+							<td>
+								<select name="currentRamS1">
+									<option>1866</option>
+									<option>2133</option>
+									<option>2400</option>
+									<option>2600</option>
+									<option>2666</option>
+									<option>2667</option>
+									<option>2800</option>
+									<option>2933</option>
+									<option>3000</option>
+									<option>3066</option>
+									<option>3200</option>
+									<option>3300</option>
+									<option>3333</option>
+									<option>3400</option>
+									<option>3466</option>
+									<option>3600</option>
+									<option>3666</option>
+									<option>3733</option>
+									<option>3800</option>
+									<option>3866</option>
+									<option>4000</option>
+									<option>4133</option>
+									<option>4200</option>
+									<option>4266</option>
+									<option>4300</option>
+									<option>4333</option>
+									<option>4400</option>
+									<option>4500</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Current GPU</td>
+							<td><input required name="currentGpu1" list="gpuList" onchange="showAvailableMotherboard(currentProc1.value,this.value,currentSlicf1.value,currentMobo1)"></td>
+						</tr>
+						<tr>
+							<td>Current SLI/CrossFire</td>
+							<td>
+								<select name="currentSlicf1" onchange="showAvailableMotherboard(currentProc1.value,currentGpu1.value,this.value,currentMobo1)">
+									<option value="1" selected>No (Default)</option>
+									<option value="2">Yes</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Current Motherboard</td>
+							<td>
+								<select name="currentMobo1">
+									<option>GIGABYTE GA-AB350M-Gaming 3</option>
+									<option>GIGABYTE B450 AORUS M</option>
+									<option>Mortoni H170 Mtech</option>
+									<option>GIGABYTE GA-AB350-Gaming 3</option>
+									<option>EVGA X299 Micro</option>
+									<option>GIGABYTE B360N AORUS GAMING WIFI</option>
+									<option>GIGABYTE B360 AORUS GAMING 3</option>
+									<option>GIGABYTE H370 AORUS GAMING 3</option>
+									<option>MSI B450 TOMAHAWK</option>
+									<option>Mortoni H170 Mtech plus</option>
+									<option>Mortoni A320M Mtech plus</option>
+									<option>ASUS TUF Z370-PRO GAMING</option>
+									<option>GIGABYTE B360M AORUS GAMING 3</option>
+									<option>ASUS TUF Z370-PLUS GAMING</option>
+									<option>ASUS PRIME X470-PRO</option>
+									<option>ASUS PRIME Z370-A</option>
+									<option>GIGABYTE GA-B250M-Gaming 5</option>
+									<option>GIGABYTE Z370 AORUS Ultra Gaming</option>
+									<option>MSI Z270 Gaming Pro Carbon</option>
+									<option>MSI B450I GAMING PLUS AC</option>
+									<option>ASUS ROG Strix Z370-G Gaming (Wi-Fi AC)</option>
+									<option>GIGABYTE GA-AX370-Gaming 5</option>
+									<option>ASUS ROG Strix X470-F Gaming</option>
+									<option>MSI Z370 Gaming Pro Carbon</option>
+									<option>DFL H170 4TUNE X</option>
+									<option>DFL A320M 4TUNE X</option>
+									<option>ASUS ROG Strix Z370-I Gaming</option>
+									<option>EVGA Z370 FTW</option>
+									<option>EVGA X299 FTW K</option>
+									<option>MSI MPG Z390 GAMING PRO CARBON</option>
+									<option>ASUS ROG Strix X470-I Gaming</option>
+									<option>ASUS ROG Strix Z370-E Gaming</option>
+									<option>GIGABYTE GA-AX370-Gaming K7</option>
+									<option>EVGA Z270 FTW K</option>
+									<option>GIGABYTE X470 AORUS GAMING 7 WIFI</option>
+									<option>NZXT N7 Z370 (White)</option>
+									<option>NZXT N7 Z370 (Black)</option>
+									<option>GIGABYTE Z370 AORUS Gaming 7</option>
+									<option>ASUS ROG Maximus X Hero (Wi-Fi AC)</option>
+									<option>ASUS ROG Crosshair VII Hero (WI-FI)</option>
+									<option>NZXT N7 Z390 (White)</option>
+									<option>NZXT N7 Z390 (Black)</option>
+									<option>ASUS ROG Maximus X Code</option>
+									<option>ASUS ROG Strix X299-E Gaming</option>
+									<option>EVGA Z270 Classified K</option>
+									<option>ASUS ROG Strix X399-E Gaming</option>
+									<option>GIGABYTE X299 DESIGNARE EX</option>
+									<option>ASUS TUF X299 MARK 1</option>
+									<option>ASUS ROG Maximus X Formula</option>
+									<option>MSI X399 Gaming Pro Carbon AC</option>
+									<option>GIGABYTE X399 AORUS Gaming 7</option>
+									<option>ASUS ROG Maximus X Apex</option>
+									<option>GIGABYTE X399 DESIGNARE EX</option>
+									<option>GIGABYTE X299 AORUS Gaming 9</option>
+									<option>GIGABYTE GA-Z270X-Gaming 8</option>
+									<option>ASUS PRIME X299-DELUXE</option>
+									<option>ASUS ROG ZENITH EXTREME</option>
+									<option>ASUS ROG Rampage VI Apex</option>
+									<option>ASUS ROG Rampage VI Extreme</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Budget</td>
+							<td><input required name="budget2"/></td>
+						</tr>
+						<tr>
+							<td>Budget For Other Parts</td>
+							<td><input name="resbudget2" placeholder="0"/></td>
+						</tr>
+						<tr>
+							<td>Target Score</td>
+							<td><input required name="score2"/></td>
+						</tr>
+						<tr>
+							<td>Score Offset</td>
+							<td><input name="offset2" placeholder="200"/></td>
+						</tr>
+						<tr>
+							<td>Level</td>
+							<td><input required name="level2"/></td>
+						</tr>
+						<tr>
+							<td>Number of Result</td>
+							<td><input name="results2" placeholder="10"/></td>
+						</tr>
+						<tr>
+							<td><button onclick="upgradeBuild()" type="button">Upgrade Build!</button></td>
+						</tr>
+					</form>
+				</table>
+			</div>
+			<div id="upgradeResults">
+				<table id="buildUpgraderTable">
+					<tr>
+						<td>CPU</td>
+						<td>RAM Channel</td>
+						<td>RAM Speed</td>
+						<td>GPU</td>
+						<td>SLI/CrossFire</td>
+						<td>Motherboard</td>
+						<td>RAM</td>
+						<td>Cost</td>
+						<td>Budget Left</td>
+						<td>Estimated Wattage</td>
+						<td>Score</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="forth">
+			<div id="scoreCalculatorHistory">
+				<h1>3DMark™ Calculator History</h1>
+				<table id="scoreCalculatorHistoryTable">
+					<tr>
+						<td>CPU</td>
+						<td>RAM Channel</td>
+						<td>RAM Speed</td>
+						<td>GPU</td>
+						<td>SLI/CrossFire</td>
+						<td>Motherboard</td>
+						<td>RAM</td>
+						<td>Cost</td>
+						<td>Budget Left</td>
+						<td>Estimated Wattage</td>
+						<td>Score</td>
+						<td>Remarks</td>
+					</tr>
+				</table>
+			</div>
+			<div id="buildMakerHistory">
+				<h1>Build Maker History</h1>
+				<table id="buildMakerHistoryTable">
+					<tr>
+						<td>CPU</td>
+						<td>RAM Channel</td>
+						<td>RAM Speed</td>
+						<td>GPU</td>
+						<td>SLI/CrossFire</td>
+						<td>Motherboard</td>
+						<td>RAM</td>
+						<td>Cost</td>
+						<td>Budget Left</td>
+						<td>Estimated Wattage</td>
+						<td>Score</td>
+						<td>Remarks</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+        </section>
+        <footer id="myFooter">
+            <div class="w3-container w3-theme-l2 w3-padding-32">
+                <h4><a href="https://steamcommunity.com/groups/PCBSTools" title="PCBSTools Official Steam Group" onclick="window.open('https://steamcommunity.com/groups/PCBSTools'); return false;">Steam Group</a> | <a href="../en/support.html" title="PCBSTools Support Page">Support</a> | <a href="https://steamcommunity.com/groups/PCBSTools#announcements" title="PCBSTools News & Announcements" onclick="window.open('https://steamcommunity.com/groups/PCBSTools#announcements'); return false;">News & Announcements</a> | <a href="https://steamcommunity.com/groups/PCBSTools#discussions" title="PCBSTools Discussion" onclick="window.open('https://steamcommunity.com/groups/PCBSTools#discussions'); return false;">Discussion</a></h4>
+            </div>
+
+            <div class="w3-container w3-theme-l1">
+                <p>Site created by <a href="https://steamcommunity.com/id/AhRoonPlayz" title="Steam Profile Ah_Roon"
+                        onclick="window.open('https://steamcommunity.com/id/AhRoonPlayz'); return false;">Ah_Roon</a>
+                    &copy; 2018 - 2019<br />
+                    Original Benchmark Calculator Script Author - <a href="https://steamcommunity.com/id/kawaiinvshen"
+                        title="Steam Profile biubiu"
+                        onclick="window.open('https://steamcommunity.com/id/kawaiinvshen'); return false;">biubiu</a>
+                    &copy;
+                    2018 - 2019 <br />
+                    Original Parts Ranking Script Author - <a href="https://steamcommunity.com/id/skbeyondpower"
+                        title="Steam Profile BeyondPower"
+                        onclick="window.open('https://steamcommunity.com/id/skbeyondpower'); return false;">BeyondPower</a>
+                    &copy; 2018 - 2019 <br />
+                    Source Code Provided by <a href="https://www.w3schools.com/" title="w3schools Website"
+                        onclick="window.open('https://www.w3schools.com/'); return false;">w3schools</a>
+                    and <a href="https://steamcommunity.com/id/shona1337" title="Steam Profile Shona"
+                        onclick="window.open('https://steamcommunity.com/id/shona1337'); return false;">Shona</a>
+                    &copy; 2019<br />
+                    <br />
+                    Special Thanks to Claudiu Kiss & <a href="https://theirregularcorporation.com"
+                        title="The Irregular Corporation Website"
+                        onclick="window.open('https://theirregularcorporation.com'); return false;">Irregular
+                        Corporation</a> for Making this awesome game!<br /></p>
+                <p></p>
+            </div>
+        </footer>
+
+        <!-- END MAIN -->
+    </div>
+
+</body>
+
+</html>

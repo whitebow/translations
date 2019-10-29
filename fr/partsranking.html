@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>PCBSTools - Parts Ranking</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Roboto", sans-serif;
+    }
+
+    .w3-sidebar {
+        z-index: 3;
+        width: 250px;
+        top: 43px;
+        bottom: 0;
+        height: inherit;
+    }
+</style>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme w3-large">
+            <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1"
+                href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+            <a href="../en/index.html" class="w3-bar-item w3-button w3-hover-green w3-theme-l1">PCBSTools</a>
+            <div class="w3-dropdown-hover w3-hover-green">
+                <button class="w3-button w3-hover-green">List of Tools</button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="../en/partsranking.html" class="w3-bar-item w3-button w3-hover-green">Parts Ranking</a>
+                    <a href="../en/calculator.html" class="w3-bar-item w3-button w3-hover-green">Calculator</a>
+                </div>
+            </div>
+            <a href="../en/upcomingfeatures.html" class="w3-bar-item w3-button w3-hide-small w3-hover-green">Upcoming
+                Features</a>
+            <a href="../en/support.html" class="w3-bar-item w3-button w3-hide-small w3-hover-green">Support</a>
+            <div class="w3-dropdown-hover w3-hover-green">
+                <button class="w3-button w3-hover-green">Language</button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="../ko/partsranking.html" class="w3-bar-item w3-button w3-hover-green">한국어</a>
+                    <a href="../en/partsranking.html" class="w3-bar-item w3-button w3-hover-green">English</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PCBS Image -->
+    <section>
+        <div align="center"><img src="img/img_partsranking.jpg" style="width:100%"></div>
+    </section>
+
+    <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+    <div class="w3-main w3-center w3-content" style="max-width:2000px">
+        <div class="w3-row w3-padding-64">
+            <div class="w3-container">
+                <h1 class="w3-text-teal">Parts Ranking</h1>
+                <p>Most accurate Parts Ranking.</p>
+                <p>Tip: Click on a Button(e.g. Score, 3DMark Score, etc.) to sort the list.</p>
+                <p>You'll need to install Chrome(Or Chromium based browser) or Firefox to display properly.</p>
+            </div>
+        </div>
+        <section class="w3-row-padding w3-center w3-light-grey">
+            <h1>CPU Parts Ranking</h1>
+            <table id="cpuDataTable" class="display cell-border">
+                <thead>
+                    <tr>
+                        <th>Manufacterer</th>
+                        <th>CPU Name</th>
+                        <th>Price</th>
+                        <th>Sell Price</th>
+                        <th>Score</th>
+                        <th>3DMark Score (No Overclock)</th>
+                        <th>3DMark Score (Overclock)</th>
+                        <th>Level Requirement</th>
+                        <th>Overclock CPU Score Increase</th>
+                    </tr>
+                </thead>
+            </table>
+        
+            <h1>GPU Parts Ranking</h1>
+            <table id="gpuDataTable" class="display cell-border">
+                <thead>
+                    <tr>
+                        <th>Manufacterer</th>
+                        <th>GPU Name</th>
+                        <th>Price</th>
+                        <th>Sell Price</th>
+                        <th>Score</th>
+                        <th>3DMark Score (Single)</th>
+                        <th>3DMark Score (Dual)</th>
+                        <th>Level Requirement</th>
+                        <th>Dual GPU Performance Increase</th>
+                    </tr>
+                </thead>
+            </table>
+        
+            <h1>CPU Parts Ranking - Horizontal Bar</h1>
+            <canvas id="cpuChart" width="300" height="250"></canvas>
+        
+            <h1>GPU Parts Ranking - Horizontal Bar</h1>
+            <canvas id="gpuChart" width="200" height="300"></canvas>
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+            <script type="text/javascript"
+                src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.2/b-1.5.4/b-html5-1.5.4/r-2.2.2/sc-1.5.0/datatables.min.js"></script>
+            <script>
+                var cpuDataUrl = 'https://api.myjson.com/bins/b168s';
+                var gpuDataUrl = 'https://api.myjson.com/bins/1hd3cs';
+
+                var cpuData = [], gpuData = [], motherboardData = [], ramData = [];
+
+                var cpuDataEvent = new Event('cpuDataReceived');
+                var gpuDataEvent = new Event('gpuDataReceived');
+
+                $(document).on("cpuDataReceived", function () {
+                    console.log('CPU data received!');
+                    cpuData.sort(function (a, b) {
+                        if (a["Actual Score (No Overclock)"] < b["Actual Score (No Overclock)"]) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    });
+                    $('#cpuDataTable').DataTable({
+                        data: cpuData,
+                        dataSrc: '',
+                        "lengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"]],
+                        "iDisplayLength": 25,
+                        columns: [
+                            { data: 'Manufacterer' },
+                            { data: 'CPU Name' },
+                            { data: 'Price' },
+                            { data: 'Sell Price' },
+                            { data: 'Score' },
+                            { data: 'Actual Score (No Overclock)' },
+                            { data: 'Actual Score (Overclock)' },
+                            { data: 'Level Requirement' },
+                            { data: 'Overclock CPU Score Increase' },
+                        ]
+                    });
+                    createCpuChart();
+                });
+
+                $(document).on("gpuDataReceived", function () {
+                    console.log('GPU data received!');
+                    gpuData.sort(function (a, b) {
+                        if (a["Actual Score (Single)"] < b["Actual Score (Single)"]) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    });
+                    $('#gpuDataTable').DataTable({
+                        data: gpuData,
+                        dataSrc: '',
+                        "lengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"]],
+                        "iDisplayLength": 25,
+                        columns: [
+                            { data: 'Manufacterer' },
+                            { data: 'GPU' },
+                            { data: 'Buy Price' },
+                            { data: 'Sell Price' },
+                            { data: 'Score' },
+                            { data: 'Actual Score (Single)' },
+                            { data: 'Actual Score (Dual)' },
+                            { data: 'Level Requirement' },
+                            { data: 'Dual GPU Performance Increase' },
+                        ]
+                    });
+                    createGpuChart();
+                });
+
+                $.ajax({
+                    url: cpuDataUrl,
+                    method: "GET",
+                    success: function (data) {
+                        cpuData = data;
+                        $(document).trigger("cpuDataReceived");
+                    }
+                });
+
+                $.ajax({
+                    url: gpuDataUrl,
+                    method: "GET",
+                    success: function (data) {
+                        gpuData = data;
+                        $(document).trigger("gpuDataReceived");
+                    }
+                });
+
+                function createCpuChart() {
+                    var ctx = document.getElementById("cpuChart").getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: getCpuData('names'),
+                            datasets: [
+                                {
+                                    label: '3DMark Score (No Overclock)',
+                                    data: getCpuData('scores')['cpuScoresNoOverclock'],
+                                    backgroundColor: 'rgba(150, 150, 150, 0.3)',
+                                    borderColor: 'rgba(0, 0, 0, 1)',
+                                    hoverBackgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: '3DMark Score (Overclock)',
+                                    data: getCpuData('scores')['cpuScoresOverclock'],
+                                    backgroundColor: 'rgba(200, 100, 100, 0.3)',
+                                    borderColor: 'rgba(0, 0, 0, 0.3)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            layout: {
+
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        fontColor: "#000",
+                                        fontSize: 14,
+                                        barPercentage: 0.7,
+                                        categoryPercentage: 1
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+
+                function createGpuChart() {
+                    var ctx = document.getElementById("gpuChart").getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: getGpuData('names'),
+                            datasets: [
+                                {
+                                    label: '3DMark Score (Single)',
+                                    data: getGpuData('scores')['gpuScoresSingle'],
+                                    backgroundColor: 'rgba(150, 150, 150, 0.3)',
+                                    borderColor: 'rgba(0, 0, 0, 1)',
+                                    hoverBackgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: '3DMark Score (Dual)',
+                                    data: getGpuData('scores')['gpuScoresDual'],
+                                    backgroundColor: 'rgba(200, 100, 100, 0.3)',
+                                    borderColor: 'rgba(0, 0, 0, 0.3)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        fontColor: "#000",
+                                        fontSize: 14,
+                                        barPercentage: 0.7,
+                                        categoryPercentage: 1
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+
+                function getCpuData(dataSrc) {
+                    var cpuScoresNoOverclock = [];
+                    var cpuScoresOverclock = [];
+                    var cpuNames = [];
+
+                    if (dataSrc === 'scores') {
+                        for (var i = 0; i < cpuData.length; i++) {
+                            cpuScoresNoOverclock.push(cpuData[i]['Actual Score (No Overclock)']);
+                            cpuScoresOverclock.push(cpuData[i]['Actual Score (Overclock)']);
+                        }
+                        return { cpuScoresNoOverclock, cpuScoresOverclock };
+                    } else if (dataSrc === 'names') {
+                        for (var i = 0; i < cpuData.length; i++) {
+                            cpuNames.push(cpuData[i]['CPU Name']);
+                        }
+                        return cpuNames;
+                    }
+
+                }
+
+                function getGpuData(dataSrc) {
+                    var gpuScores = [];
+                    var gpuScoresSingle = [];
+                    var gpuScoresDual = [];
+                    var gpuNames = [];
+
+                    if (dataSrc === 'scores') {
+                        for (var i = 0; i < gpuData.length; i++) {
+                            gpuScores.push(gpuData[i]['Score']);
+                            gpuScoresSingle.push(gpuData[i]['Actual Score (Single)']);
+                            gpuScoresDual.push(parseInt(gpuData[i]['Actual Score (Dual)']));
+                        }
+                        return { gpuScores, gpuScoresSingle, gpuScoresDual };
+                    } else if (dataSrc === 'names') {
+                        for (var i = 0; i < gpuData.length; i++) {
+                            gpuNames.push(gpuData[i].GPU);
+                        }
+                        return gpuNames;
+                    }
+
+                }
+            </script>
+        </section>
+
+
+        <!-- Credits -->
+        <section class="w3-row-padding w3-center w3-light-grey">
+            <p>
+                <font size="6">Credits</font>
+            </p>
+            <article class="w3-third">
+                <p>Ah_Roon</p>
+                <a href="https://steamcommunity.com/id/AhRoonPlayz" title="Steam Profile Ah_Roon"
+                    onclick="window.open('https://steamcommunity.com/id/AhRoonPlayz'); return false;"><img
+                        src="img/img_profile_ahroon.jpg" style="width:20%"></a>
+                <p>Made this website for PC Builders.</p>
+            </article>
+            <article class="w3-third">
+                <p>biubiu</p>
+                <a href="https://steamcommunity.com/id/kawaiinvshen" title="Steam Profile biubiu"
+                    onclick="window.open('https://steamcommunity.com/id/kawaiinvshen'); return false;"><img
+                        src="img/img_profile_biubiu.jpg" style="width:20%"></a>
+                <p>Providing source code for <a
+                        href="https://steamcommunity.com/app/621060/discussions/0/3216031607491943889/">Benchmark
+                        Calculator</a>.</p>
+            </article>
+            <article class="w3-third">
+                <p>BeyondPower</p>
+                <a href="https://steamcommunity.com/id/skbeyondpower" title="Steam Profile BeyondPower"
+                    onclick="window.open('https://steamcommunity.com/id/skbeyondpower'); return false;"><img
+                        src="img/img_profile_beyondpower.jpg" style="width:20%"></a>
+                <p>Helped me making Parts Ranking HTML Version</p>
+            </article>
+        </section>
+        <footer>
+            <div class="w3-container w3-theme-l1">
+                <p>Site created by <a href="https://steamcommunity.com/id/AhRoonPlayz" title="Steam Profile Ah_Roon"
+                        onclick="window.open('https://steamcommunity.com/id/AhRoonPlayz'); return false;">Ah_Roon</a>
+                    &copy; 2018 - 2019<br />
+                    Original Benchmark Calculator Script Author - <a href="https://steamcommunity.com/id/kawaiinvshen"
+                        title="Steam Profile biubiu"
+                        onclick="window.open('https://steamcommunity.com/id/kawaiinvshen'); return false;">biubiu</a>
+                    &copy;
+                    2018 - 2019 <br />
+                    Original Parts Ranking Script Author - <a href="https://steamcommunity.com/id/skbeyondpower"
+                        title="Steam Profile BeyondPower"
+                        onclick="window.open('https://steamcommunity.com/id/skbeyondpower'); return false;">BeyondPower</a>
+                    &copy; 2018 - 2019 <br />
+                    Source Code Provided by <a href="https://www.w3schools.com/" title="w3schools Website"
+                        onclick="window.open('https://www.w3schools.com/'); return false;">w3schools</a>
+                    and <a href="https://steamcommunity.com/id/shona1337" title="Steam Profile Shona"
+                        onclick="window.open('https://steamcommunity.com/id/shona1337'); return false;">Shona</a>
+                    &copy; 2019<br />
+                    <br />
+                    Special Thanks to Claudiu Kiss & <a href="https://theirregularcorporation.com"
+                        title="The Irregular Corporation Website"
+                        onclick="window.open('https://theirregularcorporation.com'); return false;">Irregular
+                        Corporation</a> for Making this awesome game!<br /></p>
+                <p></p>
+            </div>
+        </footer>
+
+        <!-- END MAIN -->
+    </div>
+
+</body>
+
+</html>
